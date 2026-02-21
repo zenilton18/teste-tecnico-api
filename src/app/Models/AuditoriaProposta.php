@@ -23,4 +23,14 @@ class AuditoriaProposta extends Model
     {
         return $this->belongsTo(Proposta::class);
     }
+    
+    public static function registrar($propostaId, $actor, $evento, array $payload = [])
+    {
+        return self::create([
+            'proposta_id' => $propostaId,
+            'actor'       => $actor,
+            'evento'      => $evento,
+            'payload'     => $payload,
+        ]);
+    }
 }

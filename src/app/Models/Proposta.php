@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Proposta extends Model
 {
     use SoftDeletes;
+    public const STATUS_DRAFT = 'DRAFT';
+    public const STATUS_SUBMITTED = 'SUBMITTED';
+    public const STATUS_APPROVED = 'APPROVED';
+    public const STATUS_REJECTED = 'REJECTED';
+    public const STATUS_CANCELED = 'CANCELED';
 
     protected $fillable = [
         'cliente_id',
@@ -26,5 +31,30 @@ class Proposta extends Model
     public function auditorias()
     {
         return $this->hasMany(AuditoriaProposta::class);
+    }
+    
+    public function podeMudarPara(string $novoStatus): bool
+    {
+        $fluxo = [
+            self::STATUS_DRAFT => [
+                self::STATUS_SUBMITTED,
+            ],
+            self::STATUS_SUBMITTED => [
+                self::STATUS_APPROVED,
+                self::STATUS_REJECTED,
+                self::STATUS_CANCELED,
+            ],
+        ];
+
+        return isset($fluxo[$this->status]) && in_array($novoStatus, $fluxo[$this->status]);
+    }
+
+    public function statusFinal(): bool
+    {
+        return in_array($this->status, [
+            self::STATUS_APPROVED,
+            self::STATUS_REJECTED,
+            self::STATUS_CANCELED,
+        ]);
     }
 }
