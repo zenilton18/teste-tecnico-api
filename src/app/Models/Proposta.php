@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Proposta extends Model
 {
     use SoftDeletes;
+    use HasFactory;
     public const STATUS_DRAFT = 'DRAFT';
     public const STATUS_SUBMITTED = 'SUBMITTED';
     public const STATUS_APPROVED = 'APPROVED';
