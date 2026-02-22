@@ -28,12 +28,16 @@ class PropostaController extends Controller
 
         return response()->json($proposta, 201);
     }
+
     public function update(Request $request, $id)
     {
         $proposta = Proposta::findOrFail($id);
        
         if ($proposta->statusFinal()) {
-            return response()->json(['error' => 'Proposta em status final'], 422);
+            return response()->json([
+                'error' => 'Proposta em status final não pode ser alterada',
+                'code' => 'STATUS_IMMUTABLE'
+            ], 400);
         }
 
         $proposta->validarVersao($request->versao);
@@ -71,9 +75,10 @@ class PropostaController extends Controller
 
         if (!$proposta->podeMudarPara(Proposta::STATUS_SUBMITTED)) {
             return response()->json([
-                'erro' => 'Proposta não pode ser submetida neste status'
+                'error' => 'Transição de status inválida',
+                'code'  => 'INVALID_STATUS_TRANSITION'
             ], 422);
-        }
+        } 
 
         $proposta->validarVersao($request->versao);
 
@@ -102,7 +107,8 @@ class PropostaController extends Controller
 
         if (!$proposta->podeMudarPara(Proposta::STATUS_APPROVED)) {
             return response()->json([
-                'erro' => 'Transição de status inválida'
+                'error' => 'Transição de status inválida',
+                'code'  => 'INVALID_STATUS_TRANSITION'
             ], 422);
         }
 
@@ -121,7 +127,8 @@ class PropostaController extends Controller
 
         if (!$proposta->podeMudarPara(Proposta::STATUS_REJECTED)) {
             return response()->json([
-                'erro' => 'Transição de status inválida'
+                'error' => 'Transição de status inválida',
+                'code'  => 'INVALID_STATUS_TRANSITION'
             ], 422);
         }
 
@@ -133,13 +140,15 @@ class PropostaController extends Controller
 
         return response()->json($proposta);
     }
+    
     public function cancel(Request $request, $id)
     {
         $proposta = Proposta::findOrFail($id);
 
         if (!$proposta->podeMudarPara(Proposta::STATUS_CANCELED)) {
             return response()->json([
-                'erro' => 'Transição de status inválida'
+                'error' => 'Transição de status inválida',
+                'code'  => 'INVALID_STATUS_TRANSITION'
             ], 422);
         }
 
@@ -192,7 +201,8 @@ class PropostaController extends Controller
 
         if ($proposta->statusFinal()) {
             return response()->json([
-                'error' => 'Proposta em status final não pode ser excluída'
+                'error' => 'Proposta em status final não pode ser alterada',
+                'code' => 'STATUS_IMMUTABLE'
             ], 400);
         }
 

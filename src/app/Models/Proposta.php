@@ -48,13 +48,14 @@ class Proposta extends Model
 
         return isset($fluxo[$this->status]) && in_array($novoStatus, $fluxo[$this->status]);
     }
-    
+
     public function validarVersao(int $versaoRequest)
     {
         if ($versaoRequest !== $this->versao) {
             abort(response()->json([
-                'erro' => 'Versão desatualizada. Recarregue a proposta.'
-            ], 409));
+                'error' => 'Versão desatualizada',
+                'code' => 'VERSION_CONFLICT'
+            ], 409));      
         }
     }
 
