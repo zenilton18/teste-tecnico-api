@@ -19,10 +19,14 @@ Route::prefix('v1')->group(function () {
     Route::post('/propostas/{id}/approve', [PropostaController::class, 'approve']);
     Route::post('/propostas/{id}/reject', [PropostaController::class, 'reject']);
     Route::post('/propostas/{id}/cancel', [PropostaController::class, 'cancel']);
+    Route::delete('/propostas/{id}', [PropostaController::class, 'destroy']);
 
     Route::get('/propostas/{id}', [PropostaController::class, 'show']);
     Route::get('/propostas', [PropostaController::class, 'index']);
 
+    
+
     // Auditoria
     Route::get('/propostas/{id}/auditoria', [AuditoriaPropostaController::class, 'index']);
+    
 });

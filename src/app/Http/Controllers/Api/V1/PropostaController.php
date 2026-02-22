@@ -28,6 +28,42 @@ class PropostaController extends Controller
 
         return response()->json($proposta, 201);
     }
+    public function update(Request $request, $id)
+    {
+        $proposta = Proposta::findOrFail($id);
+       
+        if ($proposta->statusFinal()) {
+            return response()->json(['error' => 'Proposta em status final'], 422);
+        }
+
+        $proposta->validarVersao($request->versao);
+
+        $dados = $request->validate([
+            'produto' => 'sometimes|string',
+            'valor_mensal' => 'sometimes|numeric',
+            'origem' => 'sometimes|in:APP,SITE,API',
+            'versao' => 'required|integer'
+        ]);
+        $antes = $proposta->only(array_keys($dados));
+
+        unset($dados['versao']);
+
+        $proposta->update($dados);
+        $proposta->increment('versao');
+        $payload = [
+            'from' => $antes,
+            'to'   => $proposta->only(array_keys($dados)),
+        ];
+
+        AuditoriaProposta::registrar(
+            $proposta->id,
+            'system',
+            'UPDATED_FIELDS',
+            $payload
+        );
+
+        return response()->json($proposta);
+    }
 
     public function submit(Request $request, $id)
     {
@@ -122,42 +158,62 @@ class PropostaController extends Controller
         return response()->json($proposta);
     }
 
-    public function update(Request $request, $id)
+    public function index(Request $request)
+    {
+        $query = Proposta::query();
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('cliente_id')) {
+            $query->where('cliente_id', $request->cliente_id);
+        }
+
+        if ($request->filled('origem')) {
+            $query->where('origem', $request->origem);
+        }
+
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortDir = $request->get('sort_dir', 'desc');
+
+        $query->orderBy($sortBy, $sortDir);
+
+        $pagina = $request->get('per_page', 10);
+
+        return response()->json(
+            $query->paginate($pagina)
+        );
+    }
+
+    public function destroy($id, Request $request)
     {
         $proposta = Proposta::findOrFail($id);
-       
+
         if ($proposta->statusFinal()) {
-            return response()->json(['error' => 'Proposta em status final'], 422);
+            return response()->json([
+                'error' => 'Proposta em status final não pode ser excluída'
+            ], 400);
         }
 
         $proposta->validarVersao($request->versao);
 
-        $dados = $request->validate([
-            'produto' => 'sometimes|string',
-            'valor_mensal' => 'sometimes|numeric',
-            'origem' => 'sometimes|in:APP,SITE,API',
-            'versao' => 'required|integer'
+        AuditoriaProposta::create([
+            'proposta_id' => $proposta->id,
+            'actor' => 'system',
+            'evento' => 'DELETED_LOGICAL',
+            'payload' => [
+                'from' => $proposta->status,
+                'to' => 'DELETED'
+            ]
         ]);
-        $antes = $proposta->only(array_keys($dados));
 
-        unset($dados['versao']);
+        $proposta->delete();
 
-        $proposta->update($dados);
-        $proposta->increment('versao');
-        $payload = [
-            'from' => $antes,
-            'to'   => $proposta->only(array_keys($dados)),
-        ];
-
-        AuditoriaProposta::registrar(
-            $proposta->id,
-            'system',
-            'UPDATED_FIELDS',
-            $payload
-        );
-
-        return response()->json($proposta);
-    }
+        return response()->json([
+            'message' => 'Proposta excluída logicamente'
+        ]);
+    }    
 }
 
 
