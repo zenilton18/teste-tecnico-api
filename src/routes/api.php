@@ -24,9 +24,14 @@ Route::prefix('v1')->group(function () {
     Route::get('/propostas/{id}', [PropostaController::class, 'show']);
     Route::get('/propostas', [PropostaController::class, 'index']);
 
-    
-
     // Auditoria
     Route::get('/propostas/{id}/auditoria', [AuditoriaPropostaController::class, 'index']);
+
+    Route::fallback(function (\Illuminate\Http\Request $request) {
+        return response()->json([
+            'error' => 'Rota não encontrada.',
+            'path' => $request->path()
+        ], 404);
+    });
     
 });

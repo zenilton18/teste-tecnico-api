@@ -1,0 +1,374 @@
+{
+  "info": {
+    "_postman_id": "18c0ddec-fe1e-484b-bded-520b708b1a49",
+    "name": "teste-tecnico",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "New cliente",
+      "id": "55f8b0f3-e9e5-4239-b061-c3f2a960fa33",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text",
+            "uuid": "012cd7b0-4914-40a7-b2bf-d15d1ae977d8"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": " {\r\n    \"nome\": \"Carlos da Silva\",\r\n    \"email\": \"joao@gmail.com\",\r\n    \"documento\": \"12345678901\"\r\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/v1/clientes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "v1",
+            "clientes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get cliente",
+      "id": "611f39d9-987b-415e-91b8-94adbda290a4",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text",
+            "uuid": "012cd7b0-4914-40a7-b2bf-d15d1ae977d8"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/v1/clientes/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "v1",
+            "clientes",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Proposta",
+      "id": "77fa17e5-1c21-4cbf-802a-f8ffeccfe0bc",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text",
+            "uuid": "012cd7b0-4914-40a7-b2bf-d15d1ae977d8"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": " {\r\n    \"cliente_id\": 1,\r\n    \"produto\": \"Seguro Vida\",\r\n    \"valor_mensal\": 99.90,\r\n    \"origem\": \"APP\"\r\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/v1/propostas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "v1",
+            "propostas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Proposta",
+      "id": "b80a4d0f-c153-4be4-89f0-02e3e5515d62",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text",
+            "uuid": "012cd7b0-4914-40a7-b2bf-d15d1ae977d8"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": " {\r\n    \"nome\": \"Carlos da Silva\",\r\n    \"email\": \"joao@gmail.com\",\r\n    \"documento\": \"12345678901\"\r\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/v1/clientes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "v1",
+            "clientes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Submit",
+      "id": "6d4dd108-7981-402e-98a6-fcd9560baf40",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"versao\" : 2}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/v1/propostas/1/submit",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "v1",
+            "propostas",
+            "1",
+            "submit"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Approve",
+      "id": "1ab65bc6-1a99-4573-a11a-f8eeeafa496f",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"versao\" : 2}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/v1/propostas/1/approve",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "v1",
+            "propostas",
+            "1",
+            "approve"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Reject",
+      "id": "5feb3a0c-35f6-4eed-ac9f-c46164765beb",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"versao\" : 2}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/v1/propostas/1/reject",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "v1",
+            "propostas",
+            "1",
+            "reject"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cancel",
+      "id": "349f898e-bdfc-40b2-a266-4a39d149a486",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"versao\" : 2}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/v1/propostas/1/submit",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "v1",
+            "propostas",
+            "1",
+            "submit"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete",
+      "id": "1f0078e2-30dd-4954-bdda-d98dc8ed6c02",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"versao\" : 2}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/v1/propostas/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "v1",
+            "propostas",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get por Cliente_id",
+      "id": "af27777c-f130-4d79-833c-70b9a7cd03ec",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get por Status",
+      "id": "b1c5ee4f-c606-4d72-94be-5352133bc615",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get por Valor",
+      "id": "92b5e0a3-8e3a-4691-b599-8546f5972529",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Auditoria",
+      "id": "cf6bf4c8-a2f7-48d6-a50f-ed2dcbe4ee84",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    }
+  ]
+}

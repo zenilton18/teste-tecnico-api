@@ -2,8 +2,7 @@
 # Propostas API
 
 API REST para gestão de clientes e propostas, desenvolvida em Laravel.
-
-##  Tecnologias
+## tecnologias
 - PHP 8.2+
 - Laravel
 - MySQL
@@ -19,36 +18,43 @@ API REST para gestão de clientes e propostas, desenvolvida em Laravel.
 - Docker
 - Docker Compose
 
-##  Rodando com Docker (opcional)
+##  Criar nosso container docker (opcional)
 
-bash
 git clone https://github.com/zenilton18/teste-tecnico-api.git
-cd projeto
+
+cd teste-tecnico-api
+
+Rode os comandos abaixo
+obs:  para facilitar deixei as configurações no .env.example então temos um comando para copiar ele para o .env principal que não foi versionado.
 
 docker compose up -d --build
-docker compose exec app php artisan key:generate
-docker compose exec app php artisan migrate --seed
+docker exec -it laravel_app bash
+cd /var/www
+composer install
+cp .env.example .env 
+php artisan key:generate
+php artisan migrate --seed
+exit
 
-Acesse:
+Acesse para ver o banco de dados usando o phpmyadin:
 http://localhost:8000
 
- Rodando sem Docker
+
+## Rodando sem Docker
 git clone https://github.com/zenilton18/teste-tecnico-api.git
-cd projeto
+cd teste-tecnico-api/src
+
 composer install
 cp .env.example .env
+obs: como o env.example foi criado para a imagem docker será necessario mudar a conexão do banco 
+no arquivo .env mude a conexão para de DB_HOST=db para  DB_HOST=127.0.0.1
+
+crie o banco de dados chamado propostas
 php artisan key:generate
-
-Configure o banco no .env:
-
-DB_DATABASE=propostas
-DB_USERNAME=root
-DB_PASSWORD=
-
-Depois:
-
 php artisan migrate --seed
 php artisan serve
+
+## detalhes
 
 Banco de dados
 O projeto utiliza:
@@ -57,9 +63,6 @@ Migrations
 Factories
 Seed automático
 
-Para recriar tudo:
-
-php artisan migrate:fresh --seed
 
 Fluxo de Status da Proposta
 
@@ -73,7 +76,7 @@ APPROVED
 REJECTED
 CANCELED
 
-Endpoints
+## Endpoints
 Clientes
 
 POST /api/v1/clientes
@@ -92,43 +95,63 @@ GET /api/v1/propostas/{id}
 GET /api/v1/propostas/{id}/auditoria
 
 Exemplos de Request
-Criar cliente
-POST /api/v1/clientes
+no seu headers configure tambem os  
 Content-Type: application/json
+aceppt: application/json
 
-{
-  "nome": "João da Silva",
-  "email": "joao@email.com",
-  "documento": "12345678901"
-}
+
+no caminho src\postman\collections\
+Você vai encontrar as collections para importação no postman, basta realizar a importação para facilitar os testes
+Criar cliente
+
+POST /api/v1/clientes
+
+  {
+    "nome": "João da Silva",
+    "email": "joao@email.com",
+    "documento": "12345678901"
+  }
+
+Buscar Cliente
+GET /api/v1/clientes/1
 
 Criar proposta
 POST /api/v1/propostas
-Content-Type: application/json
 
-{
-  "cliente_id": 1,
-  "produto": "Seguro Vida",
-  "valor_mensal": 99.90,
-  "origem": "APP"
-}
+  {
+    "cliente_id": 1,
+    "produto": "Seguro Vida",
+    "valor_mensal": 99.90,
+    "origem": "APP"
+  }
 
 Atualizar proposta (PATCH)
 PATCH /api/v1/propostas/1
-Content-Type: application/json
 
-{
-  "produto": "Seguro Residencial",
-  "valor_mensal": 120.00,
-  "versao": 1
-}
-Submeter proposta
+  {
+    "produto": "Seguro Residencial",
+    "valor_mensal": 120.00,
+    "versao": 1
+  }
+
+para atualizar um proposta 
 POST /api/v1/propostas/1/submit
-Content-Type: application/json
+POST /api/v1/propostas/1/approve
+POST /api/v1/propostas/1/reject
+POST /api/v1/propostas/1/cancel
+DELETE /api/v1/propostas/1
 
-{
-  "versao": 2
-}
+  {
+    "versao": 1
+  }
+
+Para listar propostas  com alguns exemplos de filtros 
+GET http://127.0.0.1:8000/api/v1/propostas?cliente_id=1
+GET http://127.0.0.1:8000/api/v1/propostas?status=DRAFT
+GET http://127.0.0.1:8000/api/v1/propostas?min_valor=50&max_valor=100
+
+buscar adutitoria 
+GET /api/v1/propostas/{id}/auditoria
 
 Regras de negócio
 
